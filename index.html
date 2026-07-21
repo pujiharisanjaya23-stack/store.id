@@ -670,7 +670,7 @@
 
 <script>
   // Alamat backend kamu. Isi setelah backend sudah online (Railway/Render dsb).
-  // Contoh: "https://jaya-store-backend.up.railway.app"
+  // Contoh: "https://becand-production.up.railway.app"
   const API_BASE_URL = "http://localhost:3000";
   // ---------- DATA ----------
   const GAMES = [
@@ -873,7 +873,7 @@
   }
 
   async function startCheckout() {
-    if (API_BASE_URL.includes("becand-production.up.railway.app")) {
+    if (API_BASE_URL.includes("ISI_URL_BACKEND")) {
       alert("Backend belum disambungkan. Isi API_BASE_URL di kode dengan alamat backend kamu setelah di-deploy (lihat README.md).");
       return;
     }
