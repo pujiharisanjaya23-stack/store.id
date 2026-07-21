@@ -671,7 +671,7 @@
 <script>
   // Alamat backend kamu. Isi setelah backend sudah online (Railway/Render dsb).
   // Contoh: "https://jaya-store-backend.up.railway.app"
-  const API_BASE_URL = "ISI_URL_BACKEND_DI_SINI";
+  const API_BASE_URL = "http://localhost:3000";
   // ---------- DATA ----------
   const GAMES = [
     {
@@ -680,7 +680,7 @@
       color: "linear-gradient(135deg,#ff9f3c,#FFC93C)",
       needServer: false,
       items: [
-        { amt: "50 💎", price: 8500 },
+        { amt: "5 💎", price: 8500 },
         { amt: "100 💎", price: 16000 },
         { amt: "310 💎", price: 47500 },
         { amt: "520 💎", price: 78000 },
@@ -772,81 +772,13 @@
         { amt: "Battlepass", price: 129000 },
       ]
     },
-    {
-      id: "valo", name: "Wuthering Waves", label: "VP",
-      icon: `<img src="Screenshot 2026-07-18 231145.png" style="width:100%;height:100%;object-fit:contain;">`,
-      color: "linear-gradient(135deg,#ff4655,#8b2635)",
-      needServer: false,
-      items: [
-        { amt: "420 VP", price: 59000 },
-        { amt: "700 VP", price: 95000 },
-        { amt: "1375 VP", price: 179000 },
-        { amt: "2400 VP", price: 299000 },
-        { amt: "4000 VP", price: 479000 },
-        { amt: "Battlepass", price: 129000 },
-      ]
-    },
-    {
-      id: "valo", name: "Wuthering Waves", label: "VP",
-      icon: `<img src="Screenshot 2026-07-18 231145.png" style="width:100%;height:100%;object-fit:contain;">`,
-      color: "linear-gradient(135deg,#ff4655,#8b2635)",
-      needServer: false,
-      items: [
-        { amt: "420 VP", price: 59000 },
-        { amt: "700 VP", price: 95000 },
-        { amt: "1375 VP", price: 179000 },
-        { amt: "2400 VP", price: 299000 },
-        { amt: "4000 VP", price: 479000 },
-        { amt: "Battlepass", price: 129000 },
-      ]
-    },
-    {
-      id: "valo", name: "Wuthering Waves", label: "VP",
-      icon: `<img src="Screenshot 2026-07-18 231145.png" style="width:100%;height:100%;object-fit:contain;">`,
-      color: "linear-gradient(135deg,#ff4655,#8b2635)",
-      needServer: false,
-      items: [
-        { amt: "420 VP", price: 59000 },
-        { amt: "700 VP", price: 95000 },
-        { amt: "1375 VP", price: 179000 },
-        { amt: "2400 VP", price: 299000 },
-        { amt: "4000 VP", price: 479000 },
-        { amt: "Battlepass", price: 129000 },
-      ]
-    },
   ];
   const SERVICE_FEE = 1000;
   const WA_NUMBER = "6281234567890"; // ganti dengan nomor WhatsApp admin asli
 
-  // tripayMethod = kode channel pembayaran di Tripay. Cek & cocokkan dengan
-  // dashboard Tripay > Channel Pembayaran (nama kode bisa sedikit beda tergantun akun kamu).
-  const PAYMENTS = [
-    {
-      id: "qris", label: "QRIS", dot: "#8a4bff", type: "qris", tripayMethod: "QRIS",
-      accountName: "JAYA STORE ID",
-      note: "Scan pakai aplikasi bank / e-wallet apa saja."
-    },
-    {
-      id: "bca", label: "BCA", dot: "#0060af", type: "bank", tripayMethod: "BCAVA",
-      accountNumber: "1234567890", accountName: "a.n. JAYA STORE ID"
-    },
-    {
-      id: "dana", label: "DANA", dot: "#118eea", type: "ewallet", tripayMethod: "DANA",
-      accountNumber: "0812-3456-7890", accountName: "a.n. Jaya Store ID"
-    },
-    {
-      id: "ovo", label: "OVO", dot: "#4c2a86", type: "ewallet", tripayMethod: "OVO",
-      accountNumber: "0812-3456-7890", accountName: "a.n. Jaya Store ID"
-    },
-    {
-      id: "gopay", label: "GoPay", dot: "#00aa5b", type: "ewallet", tripayMethod: "GOPAY",
-      accountNumber: "0812-3456-7890", accountName: "a.n. Jaya Store ID"
-    },
-  ];
-
   const rupiah = n => "Rp " + n.toLocaleString("id-ID");
 
-  let state = { gameId: GAMES[0].id, itemIndex: 2, payId: PAYMENTS[0].id };
+  let state = { gameId: GAMES[0].id, itemIndex: 2 };
 
   // ---------- RENDER GAME GRID ----------
   const gameGrid = document.getElementById("gameGrid");
@@ -880,44 +812,7 @@
     gameTabs.appendChild(tab);
   });
 
-  // ---------- RENDER PAYMENT TABS ----------
-  const payTabs = document.getElementById("payTabs");
-  const payDetail = document.getElementById("payDetail");
-  PAYMENTS.forEach(p => {
-    const tab = document.createElement("button");
-    tab.className = "pay-tab";
-    tab.innerHTML = `<span class="dot" style="background:${p.dot}"></span>${p.label}`;
-    tab.addEventListener("click", () => { state.payId = p.id; render(); });
-    payTabs.appendChild(tab);
-  });
-
-  function renderPayDetail(){
-    const pay = PAYMENTS.find(p => p.id === state.payId);
-    [...payTabs.children].forEach((tab,i) => tab.classList.toggle("active", PAYMENTS[i].id === pay.id));
-
-    if(pay.type === "qris"){
-      const qrData = encodeURIComponent(`JAYASTOREID-QRIS-${pay.accountName}`);
-      payDetail.innerHTML = `
-        <div class="qr-box"><img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${qrData}" alt="QRIS placeholder"></div>
-        <div class="pay-detail-info">
-          <div class="pd-label">Bayar via QRIS</div>
-          <div class="pd-value">Scan untuk bayar</div>
-          <div class="pd-name">${pay.note} · ${pay.accountName}</div>
-        </div>`;
-    } else {
-      payDetail.innerHTML = `
-        <div class="pay-detail-info">
-          <div class="pd-label">${pay.type === "bank" ? "No. Rekening " + pay.label : "No. " + pay.label}</div>
-          <div class="pd-value">${pay.accountNumber} <button class="copy-btn" id="copyBtn">SALIN</button></div>
-          <div class="pd-name">${pay.accountName}</div>
-        </div>`;
-      document.getElementById("copyBtn").addEventListener("click", (e) => {
-        navigator.clipboard.writeText(pay.accountNumber.replace(/-/g,""));
-        e.target.textContent = "TERSALIN";
-        setTimeout(() => { e.target.textContent = "SALIN"; }, 1500);
-      });
-    }
-  }
+  // ---------- RENDER GAME GRID (lanjutan) ----------
 
   // ---------- RENDER DENOM GRID ----------
   const denomGrid = document.getElementById("denomGrid");
@@ -948,10 +843,6 @@
     // server field toggle
     document.getElementById("serverId").style.display = game.needServer ? "block" : "none";
 
-    // payment detail
-    renderPayDetail();
-    const pay = PAYMENTS.find(p => p.id === state.payId);
-
     // receipt
     const item = game.items[state.itemIndex];
     const playerId = document.getElementById("playerId").value.trim();
@@ -962,7 +853,6 @@
     document.getElementById("rGame").textContent = game.name;
     document.getElementById("rItem").textContent = item.amt;
     document.getElementById("rId").textContent = playerId ? (serverId ? playerId + " (" + serverId + ")" : playerId) : "—";
-    document.getElementById("rPay").textContent = pay.label;
     document.getElementById("rPrice").textContent = rupiah(item.price);
     document.getElementById("rFee").textContent = rupiah(SERVICE_FEE);
     document.getElementById("rTotal").textContent = rupiah(total);
@@ -990,7 +880,6 @@
 
     const game = GAMES.find(g => g.id === state.gameId);
     const item = game.items[state.itemIndex];
-    const pay = PAYMENTS.find(p => p.id === state.payId);
     const playerId = document.getElementById("playerId").value.trim();
     const serverId = document.getElementById("serverId").value.trim();
     const waNumber = document.getElementById("waNumber").value.trim();
@@ -1009,7 +898,6 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           gameId: game.id, itemIndex: state.itemIndex, playerId, serverId, waNumber,
-          payMethod: pay.tripayMethod,
         }),
       });
       const data = await res.json();
@@ -1017,9 +905,8 @@
 
       showModal(`
         <div style="font-family:var(--font-display);font-size:16px;margin-bottom:14px;">Selesaikan Pembayaran</div>
-        ${data.qrUrl ? `<img src="${data.qrUrl}" style="width:180px;height:180px;margin:0 auto 14px;border-radius:10px;">` : ""}
-        ${data.vaNumber ? `<div style="font-family:var(--font-mono);font-size:20px;color:var(--gold);margin-bottom:14px;">${data.vaNumber}</div>` : ""}
         <div style="color:var(--text-dim);font-size:13px;margin-bottom:16px;">Total: <b style="color:var(--cyan);">${rupiah(data.total)}</b></div>
+        <a href="${data.payUrl}" target="_blank" class="btn btn-primary" style="width:100%;justify-content:center;margin-bottom:14px;">Lanjut ke Halaman Pembayaran →</a>
         <div id="statusLine" style="font-family:var(--font-mono);font-size:12px;color:var(--text-faint);">⏳ Menunggu pembayaran...</div>
       `);
 
